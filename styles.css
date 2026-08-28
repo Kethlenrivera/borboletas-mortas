@@ -832,6 +832,11 @@ p {
     font-size: 0.95rem;
 }
 
+.footer-bottom {
+    margin-top: 2rem;
+    text-align: center;
+}
+
 .social-links {
     display: flex;
     gap: 1.5rem;
@@ -1073,6 +1078,18 @@ p {
 .option-name {
     flex: 1;
     color: var(--text);
+}
+
+.option-badge {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary-light);
+    border: 1px solid var(--primary-light);
+    border-radius: 999px;
+    vertical-align: middle;
 }
 
 .option-price {

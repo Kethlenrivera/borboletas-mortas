@@ -92,9 +92,65 @@ function initScrollEffects() {
    MODAL
    ============================================ */
 
+const PURCHASE_DATA = {
+    EU: {
+        price: '€16,00',
+        options: [
+            { href: 'https://www.amazon.es/-/pt/dp/B0HB96SHC1', name: 'Amazon <span class="option-badge">E-book (versão digital)</span>', price: '€9,90' },
+            { href: 'https://cordeldeprata.pt/livraria/um-brinde-as-borboletas-mortas-em-meu-estomago/', name: "Cordel D' Prata - Editora", price: '€16,00' },
+            { href: 'https://www.bertrand.pt/livro/um-brinde-as-borboletas-mortas-em-meu-estomago-kethlen-chagas-/32929861', name: 'Bertrand', price: '€16,00' },
+            { href: 'https://www.wook.pt/livro/um-brinde-as-borboletas-mortas-em-meu-estomago-kethlen-chagas/32929861', name: 'Wook', price: '€16,00' },
+            { href: 'https://www.fnac.pt/Um-Brinde-as-Borboletas-Mortas-em-meu-Estomago-Kethlen-Rivera/a13799989', name: 'FNAC', price: '€16,00' }
+        ]
+    },
+    BR: {
+        price: 'R$58,99',
+        options: [
+            { href: 'https://www.amazon.com.br/brinde-borboletas-mortas-meu-est%C3%B4mago-ebook/dp/B0HB96SHC1', name: 'Amazon <span class="option-badge">E-book (versão digital)</span>', price: 'R$58,99' }
+        ]
+    }
+};
+
 function initModal() {
+    const region = isVisitorFromBrazil() ? 'BR' : 'EU';
+    renderPurchaseModal(PURCHASE_DATA[region]);
     setupModal('purchaseModal', ['btnComprar', 'btnComprarFinal']);
     setupModal('excerptModal', ['btnLerTrecho']);
+}
+
+function renderPurchaseModal(data) {
+    const priceEl = document.getElementById('purchasePrice');
+    const optionsListEl = document.getElementById('purchaseOptionsList');
+    if (!priceEl || !optionsListEl) return;
+
+    priceEl.textContent = data.price;
+
+    optionsListEl.innerHTML = data.options.map(option => `
+        <a href="${option.href}" class="option-group" target="_blank" rel="noopener noreferrer">
+            <span class="option-name">${option.name}</span>
+            <span class="option-price">${option.price}</span>
+        </a>
+    `).join('');
+}
+
+function isVisitorFromBrazil() {
+    try {
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+
+        if (timeZone.startsWith('America/') && timeZone !== 'America/New_York') {
+            return timeZone.includes('Sao_Paulo') || timeZone.includes('Bahia') ||
+                timeZone.includes('Fortaleza') || timeZone.includes('Recife') ||
+                timeZone.includes('Manaus') || timeZone.includes('Belem') ||
+                timeZone.includes('Cuiaba') || timeZone.includes('Boa_Vista') ||
+                timeZone.includes('Porto_Velho') || timeZone.includes('Rio_Branco') ||
+                timeZone.includes('Araguaina') || timeZone.includes('Maceio') ||
+                timeZone.includes('Campo_Grande') || timeZone.includes('Noronha');
+        }
+
+        return false;
+    } catch (e) {
+        return false;
+    }
 }
 
 function setupModal(modalId, openTriggerIds) {
